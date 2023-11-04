@@ -9,7 +9,18 @@ axios.defaults.headers.post["Content-Type"] =
 // 基础url
 // axios.defaults.baseURL = 后台接口地址;
 axios.defaults.baseURL = 'http://127.0.0.1:3000';
-
+//设置拦截器
+axios.interceptors.request.use(
+    (config) => {
+        if (localStorage.getItem('Authorization')) {
+            config.headers.Authorization = localStorage.getItem('Authorization');
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
 /**
  * 封装get方法
  */
@@ -21,7 +32,7 @@ export function get(url, params = {}) {
                 resolve(response.data);
             })
             .catch(err => {
-                reject(err);
+                reject(err.response.data);
             });
     });
 }
@@ -33,10 +44,12 @@ export function post(url, data = {}) {
         axios
             .post(url, data)
             .then(response => {
+                //console.log(response)
                 resolve(response.data);
             })
             .catch(err => {
-                reject(err);
+                //console.log(err)
+                reject(err.response.data);
             });
     });
 }

@@ -6,7 +6,7 @@
         <el-table-column prop="rank" label="排名" align="center"/>
         <el-table-column label="查分申请" align="center">
             <template #default="scope">
-                <el-button size="small" @click="">Edit</el-button>
+                <el-button size="small" @click="editRow(scope.row)">Edit</el-button>
                 <el-button size="small" type="danger" @click="">Delete</el-button>
             </template>
         </el-table-column>
@@ -28,6 +28,12 @@ const searchResults = computed(() => {
     const data=store.getters.search_result.slice((props.inputNum-1)*props.numValue,props.inputNum*props.numValue)
     return data
 });
+
+const editRow = (rowData) => {
+    console.log('Edit row:', rowData);
+    console.log('here'+rowData.subject)
+    // 这里可以处理编辑逻辑，比如打开一个编辑窗口
+}
 
 </script>
 

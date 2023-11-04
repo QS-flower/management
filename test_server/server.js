@@ -9,7 +9,7 @@ const PORT = 3000;
 const users = [
   { id: 1, username: '2021080911032', password: 'Q520S1314' }
 ];
-const testdata1=[
+const testdata1 = [
   {
     value: 'Option1-1',
     label: '第一次月考',
@@ -31,7 +31,7 @@ const testdata1=[
     label: '期末考试',
   },
 ]
-const testdata2=[
+const testdata2 = [
   {
     value: 'Option2-1',
     label: '语文',
@@ -54,55 +54,55 @@ const testdata2=[
   },
 ]
 
-const testdata3=[
+const testdata3 = [
   {
-    subject: '数学',
+    subject: '数学1',
     name: '李哲',
     score: 150,
-    rank:'1/1236',
-},
-{
-  subject: '数学',
-  name: '李哲',
-  score: 150,
-  rank:'1/1236',
-},
-{
-  subject: '数学',
-  name: '李哲',
-  score: 150,
-  rank:'1/1236',
-},
-{
-  subject: '数学',
-  name: '李哲',
-  score: 150,
-  rank:'1/1236',
-},
-{
-  subject: '数学',
-  name: '李哲',
-  score: 150,
-  rank:'1/1236',
-},
-{
-  subject: '数学',
-  name: '李哲',
-  score: 150,
-  rank:'1/1236',
-},
-{
-  subject: '数学',
-  name: '李哲',
-  score: 150,
-  rank:'1/1236',
-},
-{
-  subject: '数学',
-  name: '李哲',
-  score: 150,
-  rank:'1/1236',
-},
+    rank: '1/1236',
+  },
+  {
+    subject: '数学2',
+    name: '李哲',
+    score: 150,
+    rank: '1/1236',
+  },
+  {
+    subject: '数学3',
+    name: '李哲',
+    score: 150,
+    rank: '1/1236',
+  },
+  {
+    subject: '数学4',
+    name: '李哲',
+    score: 150,
+    rank: '1/1236',
+  },
+  {
+    subject: '数学5',
+    name: '李哲',
+    score: 150,
+    rank: '1/1236',
+  },
+  {
+    subject: '数学6',
+    name: '李哲',
+    score: 150,
+    rank: '1/1236',
+  },
+  {
+    subject: '数学7',
+    name: '李哲',
+    score: 150,
+    rank: '1/1236',
+  },
+  {
+    subject: '数学8',
+    name: '李哲',
+    score: 150,
+    rank: '1/1236',
+  },
 ]
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
@@ -120,7 +120,10 @@ app.post('/api/login', (req, res) => {
   const user = users.find(u => u.username === username && u.password === password);
 
   if (user) {
-    return res.status(200).json({ status: 'success', message: 'Login successful',token:'123456789' });
+    return res.status(200).json({
+      status: 'success', message: 'Login successful', token: '123456789', name: '李哲111', email_msg: [{ msg: "王老师处理了你的查分申请，点击查看详情" },
+      { msg: "黎老师处理了你的查分申请，点击查看详情" }]
+    });
   } else {
     return res.status(401).json({ status: 'error', message: 'Invalid credentials' });
   }

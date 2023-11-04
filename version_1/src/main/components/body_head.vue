@@ -33,12 +33,12 @@ const fetchData = async () => {
   try {
     examOptions.value = [];
     const examResponse = await get('/api/exam');
-    console.log('exam数据:', examResponse);
+    //console.log('exam数据:', examResponse);
     examOptions.value = examResponse;
 
     courseOptions.value = [];
     const courseResponse = await get('/api/course');
-    console.log('course数据:', courseResponse);
+    //console.log('course数据:', courseResponse);
     courseOptions.value = courseResponse;
   } catch (error) {
     console.log('获取数据失败', error);

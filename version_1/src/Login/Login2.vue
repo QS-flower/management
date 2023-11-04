@@ -24,7 +24,8 @@
 </template>
   
 <script>
-import {get,post} from '../axios_setting/index'
+import { get, post } from '../axios_setting/index'
+import { ElMessage } from 'element-plus'
 export default {
     data() {
         return {
@@ -36,7 +37,22 @@ export default {
             }
         };
     },
+    components: {
+        ElMessage,
+    },
     methods: {
+        alert_msg1(msg) {
+            ElMessage({
+                message: msg,
+                type: 'success',
+            })
+        },
+        alert_msg2(msg) {
+            ElMessage({
+                message: msg,
+                type: 'warning',
+            })
+        },
         test1() {
             //console.log("test1")
             const reg1 = /^\d{6,15}$/;
@@ -70,11 +86,17 @@ export default {
                 post('api/login', {
                     username: this.username,
                     password: this.password
-                }).then(function (respose) {
-                    alert("登录成功" + respose.data.message)
-                    this.$router.push('/');
-                }).catch(function (error) {
-                    alert("登录失败" + error)
+                }).then((response) => {
+                    //alert("登录成功" + response.message)
+                    //console.log(response.token)
+                    const user=response.token
+                    this.$store.commit('changeLogin', user);
+                    this.$store.commit('changeName',response.name)
+                    this.$store.commit('changeMsg',response.email_msg)
+                    this.alert_msg1(response.message)
+                    this.$router.push('/student/main');
+                }).catch((error) => {
+                    this.alert_msg2(error.message)
                 })
             }
         }

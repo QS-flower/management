@@ -1,44 +1,40 @@
 <template>
     <div class="welcome">
-        <small>欢迎，{{ name }}同学</small>
+        <small>欢迎，{{ getName }}同学</small>
     </div>
     <div class="right">
-        <span class="email">
-            <el-badge :value="num">
+        <el-badge :value="num" :hidden="showbadge">
                 <el-button @click="showdialog">
                     <el-icon :size="30" color="DodgerBlue">
                         <Message />
                     </el-icon>
                 </el-button>
             </el-badge>
-        </span>
         <span class="head_img">
-            <el-avatar :size="45">{{ name }}</el-avatar>
+            <el-avatar :size="45">{{ getName }}</el-avatar>
         </span>
     </div>
     <el-dialog v-model="dialogVisible" title="">
-        <el-table :data="message" :show-header="false" @row-click="handclick" class="abc">
-            <el-table-column prop="msg" lable="msg" align="center" />
+        <el-table :data="getMsg" :show-header="false" @row-click="handclick" class="abc">
+            <el-table-column prop="msg" label="msg" align="center" />
         </el-table>
     </el-dialog>
 </template>
 
 <script >
 import { Message } from '@element-plus/icons-vue'
+import { mapGetters } from 'vuex';
 export default {
     data() {
         return {
             dialogVisible: false,
-            name: '李哲',
-            message: [
-                { msg: "王老师处理了你的查分申请，点击查看详情" },
-                { msg: "黎老师处理了你的查分申请，点击查看详情" }
-            ],
+            showbadge: false,
         }
     },
     computed: {
+        ...mapGetters(['getName','getMsg']),
         num() {
-            return this.message.length;
+            return this.getMsg.length;
         },
     },
     components: {
@@ -47,9 +43,10 @@ export default {
     methods: {
         showdialog() {
             this.dialogVisible = true;
+            this.showbadge = true;
         },
         handclick() {
-            this.$router.push('/apply')
+            this.$router.push('/student/apply')
             this.dialogVisible = false;
         }
     }
@@ -57,8 +54,7 @@ export default {
 </script>
 
 <style scoped>
-.email {
-    margin-top: 15px;
+.el-badge{
     margin-right: 15px;
 }
 
@@ -70,5 +66,10 @@ export default {
 .abc ::v-deep .el-table__body tr:hover>td {
     background-color: rgb(250, 217, 222) !important;
     cursor: pointer;
+}
+.right{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 </style>
