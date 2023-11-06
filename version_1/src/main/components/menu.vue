@@ -13,7 +13,7 @@
             </el-icon>
             <span>成绩查询</span>
         </el-menu-item>
-        <el-menu-item index="/student/test">
+        <el-menu-item index="/student/analysis">
             <el-icon>
                 <DataAnalysis />
             </el-icon>
@@ -25,7 +25,7 @@
             </el-icon>
             <span>查分申请</span>
         </el-menu-item>
-        <el-menu-item index="/student/test">
+        <el-menu-item index="/student/setting">
             <el-icon>
                 <setting />
             </el-icon>

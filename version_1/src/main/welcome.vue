@@ -17,7 +17,7 @@
 .background{
     height: 100%;
     width: 100%;
-    background-image: url('../assets/welcome.png');
+    background-image: url('/welcome.png');
     background-size: 100% 100%;
 }
 

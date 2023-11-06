@@ -54,56 +54,135 @@ const testdata2 = [
   },
 ]
 
-const testdata3 = [
-  {
-    subject: '数学1',
-    name: '李哲',
-    score: 150,
-    rank: '1/1236',
-  },
-  {
-    subject: '数学2',
-    name: '李哲',
-    score: 150,
-    rank: '1/1236',
-  },
-  {
-    subject: '数学3',
-    name: '李哲',
-    score: 150,
-    rank: '1/1236',
-  },
-  {
-    subject: '数学4',
-    name: '李哲',
-    score: 150,
-    rank: '1/1236',
-  },
-  {
-    subject: '数学5',
-    name: '李哲',
-    score: 150,
-    rank: '1/1236',
-  },
-  {
-    subject: '数学6',
-    name: '李哲',
-    score: 150,
-    rank: '1/1236',
-  },
-  {
-    subject: '数学7',
-    name: '李哲',
-    score: 150,
-    rank: '1/1236',
-  },
-  {
-    subject: '数学8',
-    name: '李哲',
-    score: 150,
-    rank: '1/1236',
-  },
-]
+const testdata3 = {
+  grade:[
+    {
+      subject: '数学1',
+      name: '李哲',
+      score: 150,
+      rank: '1/1236',
+    },
+    {
+      subject: '数学2',
+      name: '李哲',
+      score: 150,
+      rank: '1/1236',
+    },
+    {
+      subject: '数学3',
+      name: '李哲',
+      score: 150,
+      rank: '1/1236',
+    },
+    {
+      subject: '数学4',
+      name: '李哲',
+      score: 150,
+      rank: '1/1236',
+    },
+    {
+      subject: '数学5',
+      name: '李哲',
+      score: 150,
+      rank: '1/1236',
+    },
+    {
+      subject: '数学6',
+      name: '李哲',
+      score: 150,
+      rank: '1/1236',
+    },
+    {
+      subject: '数学7',
+      name: '李哲',
+      score: 150,
+      rank: '1/1236',
+    },
+    {
+      subject: '数学8',
+      name: '李哲',
+      score: 150,
+      rank: '1/1236',
+    },
+  ],
+  rank:{score:700,rank1:5,number:1305},
+}
+const testdata4={
+  subjectOptions:[
+    {
+      value: 'Option2-1',
+      label: '语文',
+    },
+    {
+      value: 'Option2-2',
+      label: '数学',
+    },
+    {
+      value: 'Option2-3',
+      label: '英语',
+    },
+    {
+      value: 'Option2-4',
+      label: '物理',
+    },
+    {
+      value: 'Option2-5',
+      label: '历史',
+    },
+  ],
+  monthexam:[
+    {
+      name: '小一',
+      score: 90,
+    },
+    {
+      name: '小二',
+      score: 86,
+    },
+    {
+      name: '小三',
+      score: 91,
+    },
+    {
+      name: '小四',
+      score: 89,
+    },
+    {
+      name: '小五',
+      score: 88,
+    },
+    {
+      name: '小六',
+      score: 95,
+    },
+  ],
+  monthexam1:[
+    {
+      name: '小一1',
+      score: 90,
+    },
+    {
+      name: '小二1',
+      score: 86,
+    },
+    {
+      name: '小三1',
+      score: 91,
+    },
+    {
+      name: '小四1',
+      score: 89,
+    },
+    {
+      name: '小五1',
+      score: 88,
+    },
+    {
+      name: '小六1',
+      score: 95,
+    },
+  ]
+}
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 app.use(cors(
@@ -129,17 +208,33 @@ app.post('/api/login', (req, res) => {
   }
 });
 app.post('/api/exam_course', (req, res) => {
+  console.log('Request Headers:');
+  console.log(req.headers);
   const { exam, course } = req.body;
   console.log(exam + ' ' + course);
   return res.json(testdata3);
 })
 app.get('/api/exam', (req, res) => {
+  console.log('Request Headers:');
+  console.log(req.headers);
   return res.json(testdata1)
 })
 app.get('/api/course', (req, res) => {
+  console.log('Request Headers:');
+  console.log(req.headers);
   return res.json(testdata2)
 })
-
+app.get('/api/class',(req,res)=>{
+  return res.json(testdata4)
+})
+app.get('/api/class1',(req,res)=>{
+  return res.json(testdata4)
+})
+app.post('/api/setting', (req, res) => {
+  const { new_psd} = req.body;
+  console.log(new_psd+'helloksakka');
+  return res.json();
+})
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

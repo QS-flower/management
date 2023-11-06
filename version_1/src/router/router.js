@@ -5,10 +5,13 @@ import Wel from '../main/welcome.vue'
 import Apply from '../main/apply.vue'
 import Login from '../Login/Login2.vue'
 import Layout from '../main/index.vue'
+import Analysis from '../main/analysis.vue'
+import Analysis1 from '../main/analysis1.vue'
+import Analysis2 from '../main/analysis2.vue'
+import Setting from '../main/setting.vue'
 const routes = [
   // 登录页面作为独立的路由
   { path: '/', component: Login },
-
   // 布局组件包含的其他路由
   {
     path: '/student',
@@ -18,6 +21,10 @@ const routes = [
       { path: 'main', component: Wel },
       { path: 'test', component: Test },
       { path: 'apply', component: Apply },
+      { path: 'analysis', component: Analysis },
+      { path: 'analysis1', component: Analysis1 },
+      { path: 'analysis2', component: Analysis2 },
+      { path: 'setting',component: Setting}
     ],
   },
 ];

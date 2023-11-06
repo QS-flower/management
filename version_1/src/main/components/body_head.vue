@@ -3,13 +3,7 @@
     <div class="first">
       <span>考试：</span>
       <el-select v-model="exam_value" class="m-2" placeholder="请选择考试项目">
-        <el-option v-for="item in examOptions" :key="item.value" :label="item.label" :value="item.value" />
-      </el-select>
-    </div>
-    <div class="second">
-      <span>查询科目：</span>
-      <el-select v-model="course_value" class="m-2" placeholder="请选择查询科目">
-        <el-option v-for="item in courseOptions" :key="item.value" :label="item.label" :value="item.value" />
+        <el-option v-for="item in examOptions" :key="item.value" :label="item.label" :value="item.label" />
       </el-select>
     </div>
     <div class="but">
@@ -26,20 +20,13 @@ import {get} from '../../axios_setting/index'
 import {useStore} from 'vuex'
 const store=useStore();
 const exam_value = ref('')
-const course_value=ref('')
 const examOptions = ref<Array<{ value: string; label: string }>>([])
-const courseOptions = ref<Array<{ value: string; label: string }>>([])
 const fetchData = async () => {
   try {
     examOptions.value = [];
     const examResponse = await get('/api/exam');
     //console.log('exam数据:', examResponse);
     examOptions.value = examResponse;
-
-    courseOptions.value = [];
-    const courseResponse = await get('/api/course');
-    //console.log('course数据:', courseResponse);
-    courseOptions.value = courseResponse;
   } catch (error) {
     console.log('获取数据失败', error);
   }
@@ -50,11 +37,13 @@ onBeforeMount(()=>{
 })
 const hand_search=()=>{
   // console.log('here')
-  store.dispatch('searchData', {exam:exam_value.value,course:course_value.value});
+  store.dispatch('searchData', {exam:exam_value.value});
+  store.commit('changeVisual',true)
+
 }
 const reset=()=>{
-  exam_value.value='';
-  course_value.value=''
+  exam_value.value=''
+  store.commit('changeVisual',false)
 }
 </script>
 
@@ -66,6 +55,7 @@ const reset=()=>{
   border-radius: 5px;
   border-color: #ccdada;
   height: 10%;
+  min-height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-around;

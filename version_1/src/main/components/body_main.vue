@@ -1,5 +1,5 @@
 <template>
-    <div class="main">
+    <div class="main" v-if="visual1">
         <div class="head">
             <el-button class="search" type="success" :icon="Edit">成绩打印</el-button>
             <div class="text1">您的总分为<span class="score">{{ score }}</span>,排名<span class="grade">{{ grade }}/{{ grade_total
@@ -23,11 +23,19 @@
 </template>
 <script setup>
 import { Edit } from '@element-plus/icons-vue'
-import { ref } from 'vue'
+import { ref,computed } from 'vue'
 import Table from './table.vue'
-const score = ref(700)
-const grade = ref(1)
-const grade_total = ref(1236)
+import { useStore } from 'vuex'
+const store = useStore();
+const score = computed(()=>{
+    return store.getters.getRank.score
+})
+const grade = computed(()=>{
+    return store.getters.getRank.rank1
+})
+const grade_total = computed(()=>{
+    return store.getters.getRank.number
+})
 const num = ref(1)
 const input_num=ref(1)
 const num_value = ref(7); // 设置初始值
@@ -64,11 +72,15 @@ const nextpage=()=>{
         next.value=true
     }
 }
+const visual1=computed(()=>{
+    return store.getters.getVisual
+})
 </script>
 
 <style scoped>
 .main {
-    height: 88%;
+    height: 50%;
+    min-height: 400px;
     margin-top: 1%;
     background-color: rgb(255, 254, 254);
     border-style: solid;

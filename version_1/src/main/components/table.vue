@@ -1,7 +1,7 @@
 <template>
     <el-table :data="searchResults" border height="90%" style="width: 96%">
         <el-table-column prop="subject" label="科目" width="200" align="center"/>
-        <el-table-column prop="name" label="科任老师" width="200" align="center"/>
+        <el-table-column prop="name" label="任课老师" width="200" align="center"/>
         <el-table-column prop="score" label="分数" width="200" align="center"/>
         <el-table-column prop="rank" label="排名" align="center"/>
         <el-table-column label="查分申请" align="center">

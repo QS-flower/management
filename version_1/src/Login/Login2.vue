@@ -106,7 +106,7 @@ export default {
   
 <style scoped>
 .container {
-    background: url("../assets/background_login.jpg"), no-repeat;
+    background: url("/background_login.jpg"), no-repeat;
     background-position: center, center;
     background-attachment: fixed;
     background-size: cover;

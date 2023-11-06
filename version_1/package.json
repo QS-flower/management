@@ -8,9 +8,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "animate": "^1.0.0",
     "axios": "^1.5.1",
+    "echarts": "^5.4.3",
     "element-plus": "^2.4.0",
     "vue": "^3.3.4",
+    "vue-echarts": "^6.6.1",
     "vue-router": "^4.2.5",
     "vuex": "^4.0.2"
   },

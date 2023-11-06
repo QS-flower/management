@@ -6,7 +6,10 @@ export default createStore({
         data: [],
         search_result: [],
         message:[],
-        Authorization: localStorage.getItem('Authorization') ? localStorage.getItem('Authorization') : ''
+        Authorization: localStorage.getItem('Authorization') ? localStorage.getItem('Authorization') : '',
+        exam:'',
+        visual:false,
+        rank:{score:0,rank1:1,number:1306},
     },
     mutations: {
         updata(state, results) {
@@ -15,22 +18,34 @@ export default createStore({
         changeLogin(state, user) {
             state.Authorization = user;
             //console.log(state.Authorization+'here')
-            localStorage.setItem('Authorization', user.Authorization);
+            localStorage.setItem('Authorization', user);
         },
         changeMsg(state,msg){
             state.message=msg
         },
         changeName(state, user_name) {
             state.name = user_name
+        },
+        changeExam(state,exam1){
+            state.exam=exam1
+        },
+        changeVisual(state,visual1){
+            state.visual=visual1
+        },
+        changeRank(state,rank1){
+            state.rank=rank1;
         }
     },
     actions: {
         searchData({ commit, state }, query) {
-            //console.log(query)
+            console.log(query)
+            commit('changeExam',query.exam)
             post('/api/exam_course', query).then(function (response) {
                 //console.log('exam_course:' + response)
-                const results = response
+                const results = response.grade
+                const ranks=response.rank
                 commit('updata', results)
+                commit('changeRank',ranks)
             }).catch(function (error) {
                 // const results=state.data;
                 // commit('updata',results)
@@ -41,5 +56,8 @@ export default createStore({
         getName: state => state.name,
         search_result: state => state.search_result,
         getMsg:state=>state.message,
+        getExam:state=>state.exam,
+        getVisual:state=>state.visual,
+        getRank:state=>state.rank,
     }
 })
