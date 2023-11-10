@@ -6,8 +6,8 @@
         <el-table-column prop="rank" label="排名" align="center" />
         <el-table-column label="查分申请" align="center">
             <template #default="scope">
-                <el-button size="small" @click="editRow(scope.row)" :type="scope.row.operation==='查分申请'?'':'danger'">{{
-                    scope.row.operation }}</el-button>
+                <el-button size="small" @click="editRow(scope.row, scope.$index)" :type="typeArray[scope.$index]">{{
+                    butArray[scope.$index] }}</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -30,19 +30,22 @@ const searchResults = computed(() => {
     const data = store.getters.search_result.slice((props.inputNum - 1) * props.numValue, props.inputNum * props.numValue)
     return data
 });
-const editRow = (rowdata) => {
-    if (rowdata.operation === '查分申请') {
+const typeArray = ref(Array(100).fill('')); // 初始化一个和行数相同长度的数组
+const butArray = ref(Array(100).fill('查分申请')); // 初始化一个和行数相同长度的数组
+const editRow = (rowdata, index) => {
+    if (butArray.value[index] === '查分申请') {
         ElMessageBox.prompt('请输入查分申请信息', '备注信息', {
             confirmButtonText: '提交',
             cancelButtonText: '取消',
         }).then(({ value }) => {
-            const data = { subject: rowdata.subject, name: rowdata.name, exam: store.getters.getExam, msg: value, operation: rowdata.operation }
+            const data = { subject: rowdata.subject, name: rowdata.name, exam: store.getters.getExam, msg: value, operation: butArray.value[index] }
             post('/api/apply', data).then((response) => {
                 ElMessage({
                     message: '查分申请成功',
                     type: 'success',
                 })
-                rowdata.operation = '撤销申请'
+                typeArray.value[index] = 'danger';
+                butArray.value[index] = '撤销申请'
             }).catch((err) => {
                 console.log(err)
                 ElMessage({
@@ -62,13 +65,14 @@ const editRow = (rowdata) => {
                 type: 'warning',
             }
         ).then(() => {
-            const data = { subject: rowdata.subject, name: rowdata.name, exam: store.getters.getExam, operation: rowdata.operation }
+            const data = { subject: rowdata.subject, name: rowdata.name, exam: store.getters.getExam, operation: butArray.value[index] }
             post('/api/apply', data).then((response) => {
                 ElMessage({
                     message: '撤销申请成功',
                     type: 'success',
                 })
-                rowdata.operation = '查分申请'
+                typeArray.value[index] = '';
+                butArray.value[index] = '查分申请'
             }).catch((err) => {
                 console.log(err)
                 ElMessage({

@@ -61,48 +61,56 @@ const testdata3 = {
       name: '李哲',
       score: 150,
       rank: '1/1236',
+      operation:'查分申请',
     },
     {
       subject: '数学2',
       name: '李哲',
       score: 150,
       rank: '1/1236',
+      operation:'查分申请',
     },
     {
       subject: '数学3',
       name: '李哲',
       score: 150,
       rank: '1/1236',
+      operation:'撤销申请',
     },
     {
       subject: '数学4',
       name: '李哲',
       score: 150,
       rank: '1/1236',
+      operation:'查分申请',
     },
     {
       subject: '数学5',
       name: '李哲',
       score: 150,
       rank: '1/1236',
+      operation:'查分申请',
     },
     {
       subject: '数学6',
       name: '李哲',
       score: 150,
       rank: '1/1236',
+      operation:'查分申请',
     },
     {
       subject: '数学7',
       name: '李哲',
       score: 150,
       rank: '1/1236',
+      operation:'查分申请',
     },
     {
       subject: '数学8',
       name: '李哲',
       score: 150,
       rank: '1/1236',
+      operation:'查分申请',
     },
   ],
   rank:{score:700,rank1:5,number:1305},
@@ -221,7 +229,7 @@ app.get('/api/exam', (req, res) => {
 })
 app.get('/api/course', (req, res) => {
   console.log('Request Headers:');
-  console.log(req.headers);
+  //console.log(req.headers);
   return res.json(testdata2)
 })
 app.get('/api/class',(req,res)=>{
@@ -232,8 +240,13 @@ app.get('/api/class1',(req,res)=>{
 })
 app.post('/api/setting', (req, res) => {
   const { new_psd} = req.body;
-  console.log(new_psd+'helloksakka');
+  //console.log(new_psd+'helloksakka');
   return res.json();
+})
+app.post('/api/apply', (req, res) => {
+  const {subject,name,exam,operation,msg} = req.body;
+  console.log(subject+' '+name+' '+exam+' '+operation+' '+msg);
+  return res.json({msg:'查分申请成功'});
 })
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
