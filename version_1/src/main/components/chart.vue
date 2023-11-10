@@ -13,7 +13,7 @@ const barChart1 = ref<HTMLElement>();
 const myChart1 = ref<any>();
 const monthexam=computed(()=>{
     const data=store.getters.search_result
-    console.log(data)
+    //console.log(data)
     return data
 })
 const exam_value=computed(()=>{

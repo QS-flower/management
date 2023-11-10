@@ -1,41 +1,34 @@
 <template>
     <div class="before1">
         <div class="title">正在处理的申请</div>
-        <el-table :data="tableData" style="width: 100%" :header-cell-style="setcolor" :cell-style="setcolor">
-            <el-table-column prop="subject" label="科目" width="200" align="center" />
-            <el-table-column prop="name" label="科任老师" width="200" align="center" />
+        <el-table :data="apply_do" style="width: 100%" :header-cell-style="setcolor" :cell-style="setcolor">
+            <el-table-column prop="exam" label="考试" width="120" align="center" />
+            <el-table-column prop="subject" label="科目" width="120" align="center" />
+            <el-table-column prop="name" label="科任老师" width="120" align="center" />
             <el-table-column prop="message" label="备注信息" />
             <el-table-column label="申请状况" align="center">
                 <template #default="scope">
-                    <el-button size="small" @click="" type="success">撤销申请</el-button>
+                    <el-button size="small" @click="repeal(scope.row,scope.$index)" type="success">撤销申请</el-button>
                 </template>
             </el-table-column>
         </el-table>
     </div>
     <div class="after1">
         <div class="title">已经处理的申请</div>
-        <el-table :data="tableData" style="width: 100%" :header-cell-style="setcolor" :cell-style="setcolor">
-            <el-table-column prop="subject" label="科目" width="200" align="center" />
-            <el-table-column prop="name" label="科任老师" width="200" align="center" />
+        <el-table :data="apply_done" style="width: 100%" :header-cell-style="setcolor" :cell-style="setcolor">
+            <el-table-column prop="exam" label="考试" width="180" align="center" />
+            <el-table-column prop="subject" label="科目" width="180" align="center" />
+            <el-table-column prop="name" label="科任老师" width="180" align="center" />
             <el-table-column prop="message" label="备注信息" />
-            <el-table-column label="申请状况" align="center">
-                <template #default="scope">
-                    <el-button size="small" @click="" type="success" disabled>撤销申请</el-button>
-                </template>
-            </el-table-column>
         </el-table>
     </div>
 </template>
 
 
 <script lang="ts" setup>
-import { ElMessage } from 'element-plus'
-const alter_msg1=(msg) => {
-    ElMessage({
-        message: msg,
-        type: 'warning',
-    })
-}
+import { ElMessage,ElMessageBox } from 'element-plus'
+import {get,post} from '../axios_setting/index'
+import {onMounted, ref} from 'vue'
 const alter_msg2=(msg) => {
     ElMessage({
         message: msg,
@@ -51,28 +44,46 @@ const setcolor = () => {
     };
 
 }
-const tableData = [
-    {
-        subject: '数学',
-        name: 'Tom',
-        message: '成绩差距过大',
-    },
-    {
-        subject: '数学',
-        name: 'Tom',
-        message: '成绩差距过大',
-    },
-    {
-        subject: '数学',
-        name: 'Tom',
-        message: '成绩差距过大',
-    },
-    {
-        subject: '数学',
-        name: 'Tom',
-        message: '成绩差距过大',
-    },
-]
+const apply_do=ref([])
+const apply_done=ref([])
+const fetchdata=()=>{
+    get('/api/applydata').then((response)=>{
+        apply_do.value=response.ondo
+        apply_done.value=response.done
+    }).catch((err)=>{
+        console.log(err)
+    })
+}
+onMounted(()=>{
+    fetchdata()
+})
+const repeal=(rowdata,index)=>{
+    ElMessageBox.confirm(
+            '确定撤销申请吗',
+            'Warning',
+            {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+            }
+        ).then(() => {
+            const data = { subject: rowdata.subject, name: rowdata.name, exam: rowdata.exam, operation: '撤销申请' }
+            post('/api/apply', data).then((response) => {
+                ElMessage({
+                    message: '撤销申请成功',
+                    type: 'success',
+                })
+                apply_do.value.splice(index,1)
+            }).catch((err) => {
+                console.log(err)
+                ElMessage({
+                    message: '撤销申请失败',
+                    type: 'warning',
+                })
+            })
+        }).catch(() => {
+        })
+}
 </script>
 
 <style scoped>

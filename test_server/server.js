@@ -55,68 +55,68 @@ const testdata2 = [
 ]
 
 const testdata3 = {
-  grade:[
+  grade: [
     {
       subject: '数学1',
       name: '李哲',
       score: 150,
       rank: '1/1236',
-      operation:'查分申请',
+      operation: '查分申请',
     },
     {
       subject: '数学2',
       name: '李哲',
       score: 150,
       rank: '1/1236',
-      operation:'查分申请',
+      operation: '查分申请',
     },
     {
       subject: '数学3',
       name: '李哲',
       score: 150,
       rank: '1/1236',
-      operation:'撤销申请',
+      operation: '撤销申请',
     },
     {
       subject: '数学4',
       name: '李哲',
       score: 150,
       rank: '1/1236',
-      operation:'查分申请',
+      operation: '查分申请',
     },
     {
       subject: '数学5',
       name: '李哲',
       score: 150,
       rank: '1/1236',
-      operation:'查分申请',
+      operation: '查分申请',
     },
     {
       subject: '数学6',
       name: '李哲',
       score: 150,
       rank: '1/1236',
-      operation:'查分申请',
+      operation: '查分申请',
     },
     {
       subject: '数学7',
       name: '李哲',
       score: 150,
       rank: '1/1236',
-      operation:'查分申请',
+      operation: '查分申请',
     },
     {
       subject: '数学8',
       name: '李哲',
       score: 150,
       rank: '1/1236',
-      operation:'查分申请',
+      operation: '查分申请',
     },
   ],
-  rank:{score:700,rank1:5,number:1305},
+  rank: { score: 700, rank1: 5, number: 1305 },
 }
-const testdata4={
-  subjectOptions:[
+const testdata4 = {
+  subjectOptions: [
     {
       value: 'Option2-1',
       label: '语文',
@@ -138,7 +138,7 @@ const testdata4={
       label: '历史',
     },
   ],
-  monthexam:[
+  monthexam: [
     {
       name: '小一',
       score: 90,
@@ -164,7 +164,7 @@ const testdata4={
       score: 95,
     },
   ],
-  monthexam1:[
+  monthexam1: [
     {
       name: '小一1',
       score: 90,
@@ -190,6 +190,61 @@ const testdata4={
       score: 95,
     },
   ]
+}
+const testdata5 = {
+  ondo: [
+    {
+      subject: '数学1',
+      name: 'Tom',
+      message: '成绩差距过大',
+      exam:'期中考试',
+    },
+    {
+      subject: '数学2',
+      name: 'Tom',
+      message: '成绩差距过大',
+      exam:'期中考试',
+    },
+    {
+      subject: '数学3',
+      name: 'Tom',
+      message: '成绩差距过大',
+      exam:'期中考试',
+    },
+    {
+      subject: '数学4',
+      name: 'Tom',
+      message: '成绩差距过大',
+      exam:'期中考试',
+    },
+  ],
+  done:
+    [
+      {
+        subject: '数学d',
+        name: 'Tom',
+        message: '成绩差距过大',
+        exam:'期中考试',
+      },
+      {
+        subject: '数学d',
+        name: 'Tom',
+        message: '成绩差距过大',
+        exam:'期中考试',
+      },
+      {
+        subject: '数学d',
+        name: 'Tom',
+        message: '成绩差距过大',
+        exam:'期中考试',
+      },
+      {
+        subject: '数学d',
+        name: 'Tom',
+        message: '成绩差距过大',
+        exam:'期中考试',
+      },
+    ]
 }
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
@@ -232,21 +287,24 @@ app.get('/api/course', (req, res) => {
   //console.log(req.headers);
   return res.json(testdata2)
 })
-app.get('/api/class',(req,res)=>{
+app.get('/api/class', (req, res) => {
   return res.json(testdata4)
 })
-app.get('/api/class1',(req,res)=>{
+app.get('/api/class1', (req, res) => {
   return res.json(testdata4)
 })
 app.post('/api/setting', (req, res) => {
-  const { new_psd} = req.body;
+  const { new_psd } = req.body;
   //console.log(new_psd+'helloksakka');
   return res.json();
 })
 app.post('/api/apply', (req, res) => {
-  const {subject,name,exam,operation,msg} = req.body;
-  console.log(subject+' '+name+' '+exam+' '+operation+' '+msg);
-  return res.json({msg:'查分申请成功'});
+  const { subject, name, exam, operation, msg } = req.body;
+  console.log(subject + ' ' + name + ' ' + exam + ' ' + operation + ' ' + msg);
+  return res.json({ msg: '查分申请成功' });
+})
+app.get('/api/applydata', (req, res) => {
+  return res.json(testdata5)
 })
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
