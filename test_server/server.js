@@ -116,28 +116,6 @@ const testdata3 = {
   rank: { score: 700, rank1: 5, number: 1305 },
 }
 const testdata4 = {
-  subjectOptions: [
-    {
-      value: 'Option2-1',
-      label: '语文',
-    },
-    {
-      value: 'Option2-2',
-      label: '数学',
-    },
-    {
-      value: 'Option2-3',
-      label: '英语',
-    },
-    {
-      value: 'Option2-4',
-      label: '物理',
-    },
-    {
-      value: 'Option2-5',
-      label: '历史',
-    },
-  ],
   monthexam: [
     {
       name: '小一',
@@ -246,6 +224,30 @@ const testdata5 = {
       },
     ]
 }
+const testdata6={
+  subjectOptions: [
+    {
+      value: 'Option2-1',
+      label: '语文',
+    },
+    {
+      value: 'Option2-2',
+      label: '数学',
+    },
+    {
+      value: 'Option2-3',
+      label: '英语',
+    },
+    {
+      value: 'Option2-4',
+      label: '物理',
+    },
+    {
+      value: 'Option2-5',
+      label: '历史',
+    },
+  ],
+}
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 app.use(cors(
@@ -287,8 +289,13 @@ app.get('/api/course', (req, res) => {
   //console.log(req.headers);
   return res.json(testdata2)
 })
-app.get('/api/class', (req, res) => {
+app.post('/api/class', (req, res) => {
+  const{subject}=req.body
+  console.log(subject)
   return res.json(testdata4)
+})
+app.get('/api/subject', (req, res) => {
+  return res.json(testdata6)
 })
 app.get('/api/class1', (req, res) => {
   return res.json(testdata4)

@@ -29,18 +29,10 @@
 import { ElMessage,ElMessageBox } from 'element-plus'
 import {get,post} from '../axios_setting/index'
 import {onMounted, ref} from 'vue'
-const alter_msg2=(msg) => {
-    ElMessage({
-        message: msg,
-        type: 'success',
-    })
-}
 const setcolor = () => {
     return {
-        color: "#000",
         textAlign: "center",
-        background: "rgb(250, 254, 252)",
-        fontFamily: 'KaiTi',
+        
     };
 
 }
@@ -88,7 +80,7 @@ const repeal=(rowdata,index)=>{
 
 <style scoped>
 .before1 {
-    background-color: rgb(250, 254, 252);
+    
     width: 100%;
     height: 48%;
     border-style: solid;
@@ -98,7 +90,7 @@ const repeal=(rowdata,index)=>{
 }
 
 .after1 {
-    background-color: rgb(250, 254, 252);
+   
     margin-top: 20px;
     width: 100%;
     height: 48%;

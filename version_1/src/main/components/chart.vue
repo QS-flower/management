@@ -30,7 +30,7 @@ function chartOptions() {
         myChart1.value = echarts.init(barChart1.value!);
         myChart1.value.setOption({
             title: {
-                text: `李哲同学的${exam_value.value}成绩`,
+                text: `${store.getters.getName}的${exam_value.value}成绩`,
                 x: 'center'
             },
             tooltip: {

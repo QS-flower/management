@@ -12,23 +12,24 @@
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
-import {post} from '../axios_setting/index.js'
+import { post } from '../axios_setting/index.js'
 import { ElMessage } from 'element-plus'
 const input1 = ref('')
 const input2 = ref('')
-const alter_msg1=(msg) => {
+const alter_msg1 = (msg) => {
     ElMessage({
         message: msg,
         type: 'warning',
     })
 }
-const alter_msg2=(msg) => {
+const alter_msg2 = (msg) => {
     ElMessage({
         message: msg,
         type: 'success',
     })
 }
 const checkPasswords = () => {
+
     if (input1.value != input2.value && (input1.value != '' && input2.value != '')) {
         alter_msg1('两次输入的密码不一致，请重新输入！')
         input1.value = '';
@@ -38,10 +39,13 @@ const checkPasswords = () => {
         alter_msg1('密码不能为空，请重新输入！')
         input1.value = '';
         input2.value = '';
-    } else {
-        post('/api/setting',{new_psd:input1.value}).then(rsponse=>{
+    } else if (input1.value.length < 6 || input1.value.length > 20) {
+        alter_msg1('密码长度需为6-20位')
+    }
+    else {
+        post('/api/setting', { new_psd: input1.value }).then(rsponse => {
             alter_msg2('修改密码成功')
-        }).catch(err=>{
+        }).catch(err => {
             alter_msg1('修改密码失败')
         })
     }

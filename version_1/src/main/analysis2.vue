@@ -33,29 +33,20 @@ const lineChart = ref<HTMLElement>();
 const lineChart1 = ref<HTMLElement>();
 const myChart1 = ref<any>();
 const myChart2 = ref<any>();
-const fetchData = async () => {
-    try {
-        monthexam.value = []
-        monthexam1.value = []
-        const classResponse = await get('/api/class1');
-        monthexam.value = classResponse.monthexam
-        monthexam1.value = classResponse.monthexam1
-    } catch (error) {
-        // console.log('获取数据失败', error);
-    }
-};
-
-onBeforeMount(() => {
-    fetchData()
-})
 const hand_search = () => {
 
     // store.dispatch('searchData', { id:input1 });
     //此处在数据库中检查数据，成功执行isVisible.value= true...，否则报错
-    isVisible.value = true;
-    isVisible1.value = true;
-    chartOptions();
-    chartOptions1();
+    get('/api/class1').then((response) => {
+        monthexam.value = response.monthexam
+        monthexam1.value = response.monthexam1
+        isVisible.value = true;
+        isVisible1.value = true;
+        chartOptions();
+        chartOptions1();
+    }).catch((err)=>{
+        console.log(err);
+    })
 
 }
 const reset = () => {
@@ -74,7 +65,7 @@ function chartOptions() {
         myChart1.value = echarts.init(lineChart.value!);
         myChart1.value.setOption({
             title: {
-                text: `李哲的成绩报告`,
+                text: `${store.getters.getName}的成绩报告`,
                 x: 'center'
             },
             tooltip: {
@@ -118,7 +109,7 @@ function chartOptions1() {
         myChart2.value = echarts.init(lineChart1.value!);
         myChart2.value.setOption({
             title: {
-                text: `李哲的历次考试排名报告`,
+                text: `${store.getters.getName}的历次考试排名报告`,
                 x: 'center'
             },
             tooltip: {
