@@ -59,5 +59,6 @@ export default createStore({
         getExam:state=>state.exam,
         getVisual:state=>state.visual,
         getRank:state=>state.rank,
+        getAut:state=>state.Authorization
     }
 })

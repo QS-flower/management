@@ -94,7 +94,11 @@ export default {
                     this.$store.commit('changeName',response.name)
                     this.$store.commit('changeMsg',response.email_msg)
                     this.alert_msg1(response.message)
-                    this.$router.push('/student/main');
+                    if(user.length===6){
+                        this.$router.push('/teacher/main');
+                    }else if(user.length===10){
+                        this.$router.push('/student/main');
+                    }
                 }).catch((error) => {
                     this.alert_msg2(error.message)
                 })

@@ -1,6 +1,6 @@
 <template>
     <div class="welcome">
-        <small>欢迎，{{ getName }}同学</small>
+        <small>欢迎，{{ getName }}{{ getAut.length===10?'同学':'老师' }}</small>
     </div>
     <div class="right">
         <el-badge :value="num" :hidden="showbadge">
@@ -32,7 +32,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getName','getMsg']),
+        ...mapGetters(['getName','getMsg','getAut']),
         num() {
             return this.getMsg.length;
         },

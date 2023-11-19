@@ -24,7 +24,7 @@ function chartOptions() {
     if (myChart1.value) {
         myChart1.value.clear();
     }
-    const x = monthexam.value.map(item => item.name);
+    const x = monthexam.value.map(item => item.subject);
     const y = monthexam.value.map(item => item.score);
     setTimeout(function () {
         myChart1.value = echarts.init(barChart1.value!);
