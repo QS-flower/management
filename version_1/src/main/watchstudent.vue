@@ -19,35 +19,22 @@
         </div>
     </el-scrollbar>
 </template>
-  
-  
-   
+
 <script lang="ts" setup>
 
 import { ref, onBeforeMount, onMounted } from 'vue'
 import * as echarts from 'echarts';
 import { Delete, Search } from '@element-plus/icons-vue'
-import { get, post } from '../axios_setting/index'
+import { post } from '../axios_setting/index'
 const isVisible = ref(false);
 const isVisible1 = ref(false);
 const input1 = ref('');
 const examscore = ref<Array<{ name: string; score: string }>>([])
-const examsrank = ref<Array<{ name: string; rank: string }>>([])
+const examsrank = ref<Array<{ name: string; rank: string; rank1: string }>>([])
 const lineChart = ref<HTMLElement>();
 const lineChart1 = ref<HTMLElement>();
 const myChart1 = ref<any>();
 const myChart2 = ref<any>();
-const fetchData = async () => {
-    try {
-
-    } catch (error) {
-        // console.log('获取数据失败', error);
-    }
-};
-
-onBeforeMount(() => {
-    fetchData()
-})
 const hand_search = () => {
     if (input1.value != '') {
         post('/api/watchstudent', { sid: input1.value }).then((response) => {
@@ -118,7 +105,8 @@ function chartOptions1() {
         myChart2.value.clear();
     }
     const x = examsrank.value.map(item => item.name);
-    const y = examsrank.value.map(item => item.rank);
+    const y1 = examsrank.value.map(item => item.rank);
+    const y2 = examsrank.value.map(item => item.rank1); // 添加第二组数值
     setTimeout(function () {
         myChart2.value = echarts.init(lineChart1.value!);
         myChart2.value.setOption({
@@ -130,7 +118,7 @@ function chartOptions1() {
                 trigger: 'item'
             },
             legend: {
-                data: ['排名'],
+                data: ['班级排名', '年级排名'],
                 orient: 'vertical',
                 right: 60,
                 top: 20
@@ -141,19 +129,44 @@ function chartOptions1() {
                     show: false
                 }
             },
-            yAxis: {
-                type: 'value',
-                inverse: true,
-                axisLine: {
-                    show: false
+            yAxis: [
+                {
+                    type: 'value',
+                    inverse: true,
+                    axisLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        formatter: '{value}' // 显示第一组数值
+                    }
+                },
+                {
+                    type: 'value',
+                    inverse: true,
+                    axisLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        formatter: '{value}' // 显示第二组数值
+                    }
                 }
-            },
-            color: ['red', '#6dbcf7'],
+            ],
+            color: ['yellow', 'red'],
             series: [
                 {
-                    name: '排名',
+                    name: '班级排名',
                     type: 'line',
-                    data: y,
+                    data: y1,
+                    barWidth: '20',
+                    label: {
+                        show: true,
+                        position: 'top'
+                    }
+                },
+                {
+                    name: '年级排名',
+                    type: 'line',
+                    data: y2,
                     barWidth: '20',
                     label: {
                         show: true,
@@ -163,8 +176,8 @@ function chartOptions1() {
             ]
         });
     }, 100);
-
 }
+
 </script>
     
 <style scoped>

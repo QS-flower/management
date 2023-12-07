@@ -2,7 +2,7 @@
     <el-scrollbar height="600px">
         <div
             style="font-family: youyuan;font-size: 20px;font-weight: bolder;color: rgb(43, 206, 43);border-bottom: 1px solid #ccdada;">
-            班级内查看</div>
+            班级内学科成绩查看</div>
         <div class="main">
             <div class="first">
                 <span>班级：</span>
@@ -24,7 +24,7 @@
         <div v-if="isVisible" ref="barChart" style="width: 800px;height: 500px;top:30px;left: 20%;"></div>
         <div v-if="isVisible" ref="pieChart" style="width: 800px;height: 500px;top:30px;left: 20%;"></div>
         <div style="font-family: youyuan;font-size: 20px;font-weight: bolder;color: rgb(96, 154, 236);margin-top: 50px;">
-            班级间比较
+            班级间学科成绩比较
         </div>
         <div class="main">
             <div class="second">
@@ -39,6 +39,24 @@
             </div>
         </div>
         <div v-if="isVisible1" ref="barChart1" style="width: 800px;height: 500px;top:30px;left: 20%;"></div>
+        <div style="font-family: youyuan;font-size: 20px;font-weight: bolder;color: rgb(218, 68, 13);margin-top: 50px;">
+            总成绩分析
+        </div>
+
+        <div class="main">
+            <div class="second">
+                <span>考试名称：</span>
+                <el-select v-model="exam_value2" class="m-2" placeholder="请选择考试名称">
+                    <el-option v-for="item in examOptions1" :key="item.value" :label="item.label" :value="item.label" />
+                </el-select>
+            </div>
+            <div class="but" style="margin-left: 465px; position: relative;">
+                <el-button type="success" :icon="Search" @click="hand_search2">查询</el-button>
+                <el-button :icon="Delete" @click="reset2">重置</el-button>
+            </div>
+        </div>
+        <div v-if="isVisible2" ref="barChart2" style="width: 800px;height: 500px;top:30px;left: 20%;"></div>
+        <div v-if="isVisible3" ref="lineChart" style="width: 800px;height: 500px;top:30px;left: 20%;"></div>
     </el-scrollbar>
 </template>
 <script lang="ts" setup>
@@ -48,27 +66,37 @@ import { Delete, Search } from '@element-plus/icons-vue'
 import { get, post } from '../axios_setting/index'
 const isVisible = ref(false);
 const isVisible1 = ref(false);
+const isVisible2 = ref(false);
+const isVisible3 = ref(false);
 const class_value = ref('')
 const exam_value = ref('')
 const exam_value1 = ref('')
+const exam_value2 = ref('')
 const classOptions = ref<Array<{ value: string; label: string }>>([])
 const examOptions = ref<Array<{ value: string; label: string }>>([])
 const examOptions1 = ref<Array<{ value: string; label: string }>>([])
 const monthexam2 = ref<Array<{ name: string; value: string }>>([])
+const monthexam3 = ref<Array<{ name: string; score: string }>>([])
+const monthexam4 = ref<Array<{ name: string; score: string }>>([])
 const monthexam = ref<Array<{ name: string; score: string }>>([])
 const monthexam1 = ref<Array<{ name: string; score: string }>>([])
 const barChart = ref<HTMLElement>();
 const barChart1 = ref<HTMLElement>();
+const barChart2 = ref<HTMLElement>();
+const lineChart = ref<HTMLElement>();
 const pieChart = ref<HTMLElement>();
 const myChart1 = ref<any>();
 const myChart2 = ref<any>();
 const myChart3 = ref<any>();
+const myChart4 = ref<any>();
+const myChart5 = ref<any>();
 const fetchData = async () => {
     try {
         classOptions.value = [];
         examOptions.value = [];
         const suboption = await get('/api/watchclass')
         classOptions.value = suboption.class;
+        examOptions1.value = suboption.exam;
     } catch (error) {
         console.log('获取数据失败', error);
     }
@@ -80,7 +108,7 @@ onBeforeMount(() => {
 
 const hand_search = () => {
     if (exam_value.value != '' && class_value.value != '') {
-        post('/api/watchclass0', { class1: class_value.value, exam: exam_value.value }).then((response) => {
+        post('/api/watchclass0', { class: class_value.value, exam: exam_value.value }).then((response) => {
             monthexam.value = response.inclassexam;
             monthexam2.value = response.inclassexam1;
             isVisible.value = true;
@@ -93,9 +121,8 @@ const hand_search = () => {
 }
 const handlechange1 = () => {
     if (class_value.value != '') {
-        post('/api/watchclass2', { class1: class_value.value }).then((response) => {
+        post('/api/watchclass2', { class: class_value.value }).then((response) => {
             examOptions.value = response.exam;
-            examOptions1.value = response.exam;
         }).catch((err) => {
             console.log(err);
         })
@@ -115,8 +142,21 @@ const hand_search1 = () => {
         })
     }
 }
+const hand_search2 = () => {
+    if (exam_value2.value != '') {
+        post('/api/watchclass3', { exam1: exam_value2.value }).then((response) => {
+            monthexam3.value = response.totalscore;
+            monthexam4.value = response.totalavgscore;
+            isVisible2.value = true;
+            isVisible3.value = true;
+            chartOptions3();
+            chartOptions4();
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+}
 const reset = () => {
-    examOptions1.value = [];
     examOptions.value = [];
     class_value.value = '';
     exam_value.value = '';
@@ -128,6 +168,13 @@ const reset1 = () => {
     exam_value1.value = '';
     isVisible1.value = false;
     myChart1.value.clear();
+}
+const reset2 = () => {
+    exam_value2.value = '';
+    isVisible2.value = false;
+    isVisible3.value = false;
+    myChart3.value.clear();
+    myChart4.value.clear();
 }
 function chartOptions() {
     if (myChart1.value) {
@@ -263,6 +310,93 @@ function chartOptions2() {
             ]
         });
     }, 100);
+}
+function chartOptions3() {
+    if (myChart4.value) {
+        myChart4.value.clear();
+    }
+    const x = monthexam3.value.map(item => item.name);
+    const y = monthexam3.value.map(item => item.score);
+    setTimeout(function () {
+        myChart4.value = echarts.init(barChart2.value!);
+        myChart4.value.setOption({
+            title: {
+                text: `${exam_value2.value}班级总成绩`,
+                x: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                data: ['成绩'],
+                orient: 'vertical',
+                right: 60,
+                top: 20
+            },
+            xAxis: {
+                data: x,
+            },
+            yAxis: {},
+            color: ['#c38bef', '#6dbcf7'],
+            series: [
+
+                {
+                    name: '成绩',
+                    type: 'bar',
+                    data: y,
+                    barWidth: '20',
+                    label: {
+                        show: true,
+                        position: 'top'
+                    }
+                }
+            ]
+        });
+    }, 100);
+}
+function chartOptions4() {
+    if (myChart5.value) {
+        myChart5.value.clear();
+    }
+    const x = monthexam4.value.map(item => item.name);
+    const y = monthexam4.value.map(item => item.score);
+    setTimeout(function () {
+        myChart5.value = echarts.init(lineChart.value!);
+        myChart5.value.setOption({
+            title: {
+                text: `${exam_value2.value}的历次成绩排名`,
+                x: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                data: ['成绩'],
+                orient: 'vertical',
+                right: 60,
+                top: 20
+            },
+            xAxis: {
+                data: x,
+            },
+            yAxis: {
+            },
+            color: ['red', '#6dbcf7'],
+            series: [
+                {
+                    name: '成绩',
+                    type: 'line',
+                    data: y,
+                    barWidth: '20',
+                    label: {
+                        show: true,
+                        position: 'top'
+                    }
+                }
+            ]
+        });
+    }, 100);
+
 }
 </script>
     

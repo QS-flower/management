@@ -9,6 +9,9 @@
                 <el-form-item label="考试">
                     <el-input v-model="grade.exam" />
                 </el-form-item>
+                <el-form-item label="学科">
+                    <el-input v-model="grade.subject" />
+                </el-form-item>
                 <el-form-item label="分数">
                     <el-input v-model="grade.score" />
                 </el-form-item>
@@ -20,7 +23,7 @@
         </div>
         <div class="file">
             <div class="title">文件上传</div>
-            <el-upload class="upload-demo" drag :before-upload="beforeUpload" multiple>
+            <el-upload class="upload-demo" drag :before-upload="beforeUpload" action="http://127.0.0.1:3000/api/uploadfile" multiple :on-success="on_success" :headers="customHeaders">
                 <el-icon class="el-icon--upload"><upload-filled /></el-icon>
                 <div class="el-upload__text">
                     将文件拖动到这里或<em>点击上传</em>
@@ -41,17 +44,23 @@ import { UploadFilled } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref } from 'vue'
 import { post } from '../axios_setting/index'
-import axios from 'axios'
+import {useStore} from 'vuex'
+const store=useStore();
 const grade = ref({
     Stunum: '',
     exam: '',
     score: '',
+    subject:'',
 })
 const handleReset = () => {
     grade.value.Stunum = '';
     grade.value.exam = '';
     grade.value.score = '';
+    grade.value.subject='';
 }
+const customHeaders = {
+  Authorization: store.getters.getAut, // 设置自定义的 Authorization 头信息
+};
 const handleSubmit = () => {
     ElMessageBox.confirm(
         '确定提交成绩吗',
@@ -62,7 +71,7 @@ const handleSubmit = () => {
             type: 'warning',
         }
     ).then(() => {
-        const data = { Stu: grade.value.Stunum, exam: grade.value.exam, score: grade.value.score }
+        const data = { Stu: grade.value.Stunum, exam: grade.value.exam, score: grade.value.score ,subject:grade.value.subject}
         post('/api/upload', data).then((response) => {
             ElMessage({
                 message: '提交成功',
@@ -79,23 +88,17 @@ const handleSubmit = () => {
     }).catch(() => {
     })
 }
+const on_success=()=>{
+    ElMessage.success('上传成功')
+}
 const beforeUpload = (file) => {
-    // 显示确认对话框
-    ElMessageBox.confirm('确定要上传吗？', '确认上传', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-    })
-        .then(() => {
-            if (checkFileType(file)) {
-                handleUpload(file);
-            } else {
-                ElMessage.error('请上传 .xlsx 或 .xls 文件');
-            }
-        })
-        .catch(() => {
-            ElMessage.info('已取消上传');
-        });
+  // 检查文件类型
+  if (!checkFileType(file)) {
+    ElMessage.error('请上传 .xlsx 或 .xls 文件');
+    return false; // 阻止上传
+  }
+  // 文件类型检查通过，可以继续上传
+  return true;
 };
 
 const checkFileType = (file) => {
@@ -105,26 +108,7 @@ const checkFileType = (file) => {
     return allowedTypes.includes(fileType);
 };
 
-const handleUpload = (file) => {
-    const formData = new FormData();
-    // 将文件追加到 FormData 中
-    formData.append('file', file);
 
-    // 发送 POST 请求
-    axios.post('http://localhost:3000/api/uploadfile', formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data', // 设置请求头为 multipart/form-data
-        },
-    })
-        .then(response => {
-            console.log('上传成功:', response.data);
-            ElMessage.success('上传成功！')
-        })
-        .catch(error => {
-            console.error('上传失败:', error);
-            ElMessage.error('上传失败！')
-        });
-};
 </script>
 <style scoped>
 .main {
